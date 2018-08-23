@@ -2,6 +2,7 @@
 .python-version
 .svn
 *.pyc
+*~
 *.tsv
 *.gz
 *.zip
