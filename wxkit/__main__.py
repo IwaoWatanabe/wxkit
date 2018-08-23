@@ -4,8 +4,6 @@ import os, sys
 from wxkit import trace
 
 app_classes = [
-    'wxkit.memo.SearchDialog',
-    'wxkit.table.TSVEditorApp',
     'wxkit.basic.BasicWX',
     'wxkit.memo.MemoApp02',
     'wxkit.memo.MemoApp01',
@@ -21,22 +19,22 @@ def _find_class(hn):
   return mod
 
 def _apdic(cn):
-  cns = cn.split(':'); cn = cns.pop(0)
+  cns = cn.rstrip().split(':'); cn = cns.pop(0)
   return cns[0] if cns else cn.split('.')[-1].replace('App','').replace('Dialog','').lower(), cn
 
 aplst = [_apdic(cn) for cn in app_classes]
 
 with open(os.environ.get('APPS','apps.txt')) as fh:
-  aplst.extend([_apdic(cn) for cn in fh])
+  aplst.extend([_apdic(cn) for cn in fh if cn.strip() and not cn.startswith('#')])
 
 apdic = { an: (an, cn) for an, cn in aplst }
                          
 apname = sys.argv[1] if len(sys.argv) > 1 else ""
-mm = apdic.get(apname, aplst[0]) # 見つからなければ、先頭のアプリを動かす
+mm = apdic.get(apname, aplst[-1]) # 見つからなければ、末尾のアプリを動かす
 
-if os.environ.get("SHOW", ""):
+if os.environ.get("LIST", ""):
   trace("apps", sorted(apdic.values(), key=lambda x: x[0]))
-  
+
 if os.environ.get("ALL", ""):
   apdic.pop(mm[0], None)
   for apname, hn in apdic.values():

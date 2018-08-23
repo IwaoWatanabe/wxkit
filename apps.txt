@@ -1,0 +1,4 @@
+# 起動アプリケーションを定義していきます
+wxkit.memo.SearchDialog
+wxkit.table.TSVEditorApp
+
